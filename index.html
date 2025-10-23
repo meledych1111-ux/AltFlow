@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtFlow - Профессиональный графический редактор</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app" class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-brand">
+                <h1 class="logo">ArtFlow</h1>
+                <span class="version">v1.0</span>
+            </div>
+            <nav class="header-nav">
+                <button class="nav-btn" data-action="new">Новый</button>
+                <button class="nav-btn" data-action="open">Открыть</button>
+                <button class="nav-btn" data-action="save">Сохранить</button>
+                <button class="nav-btn" data-action="export">Экспорт</button>
+            </nav>
+        </header>
+
+        <!-- Main Container -->
+        <main class="main-container">
+            <!-- Toolbar -->
+            <aside class="toolbar">
+                <div class="tool-section">
+                    <h3 class="section-title">Инструменты</h3>
+                    <div class="tool-grid">
+                        <button class="tool-btn active" data-tool="brush" title="Кисть (B)">
+                            <span class="tool-icon">🖌️</span>
+                        </button>
+                        <button class="tool-btn" data-tool="eraser" title="Ластик (E)">
+                            <span class="tool-icon">🧽</span>
+                        </button>
+                        <button class="tool-btn" data-tool="shape" title="Фигуры (S)">
+                            <span class="tool-icon">⬜</span>
+                        </button>
+                        <button class="tool-btn" data-tool="text" title="Текст (T)">
+                            <span class="tool-icon">📝</span>
+                        </button>
+                        <button class="tool-btn" data-tool="eyedropper" title="Пипетка (I)">
+                            <span class="tool-icon">💧</span>
+                        </button>
+                        <button class="tool-btn" data-tool="fill" title="Заливка (G)">
+                            <span class="tool-icon">🪣</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <h3 class="section-title">Кисти</h3>
+                    <div class="brush-list" id="brushList">
+                        <!-- Будет заполнено динамически -->
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <h3 class="section-title">Цвет</h3>
+                    <div class="color-controls">
+                        <div class="color-picker-container">
+                            <input type="color" id="primaryColor" value="#3498db" class="color-input">
+                            <label for="primaryColor" class="color-label">Основной</label>
+                        </div>
+                        <div class="color-picker-container">
+                            <input type="color" id="secondaryColor" value="#ffffff" class="color-input">
+                            <label for="secondaryColor" class="color-label">Фоновый</label>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Canvas Area -->
+            <section class="canvas-area">
+                <div class="canvas-container" id="canvasContainer">
+                    <canvas id="mainCanvas" class="main-canvas"></canvas>
+                    <div class="canvas-overlay">
+                        <div class="zoom-controls">
+                            <button class="zoom-btn" data-action="zoom-out">−</button>
+                            <span class="zoom-level" id="zoomLevel">100%</span>
+                            <button class="zoom-btn" data-action="zoom-in">+</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Properties Panel -->
+            <aside class="properties-panel">
+                <div class="panel-section">
+                    <h3 class="section-title">Свойства инструмента</h3>
+                    <div class="property-controls" id="toolProperties">
+                        <!-- Будет заполнено динамически -->
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3 class="section-title">Слои</h3>
+                    <div class="layer-controls">
+                        <button class="layer-btn" data-action="add-layer">+</button>
+                        <button class="layer-btn" data-action="delete-layer">−</button>
+                        <button class="layer-btn" data-action="duplicate-layer">⎘</button>
+                    </div>
+                    <div class="layers-list" id="layersList">
+                        <!-- Будет заполнено динамически -->
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3 class="section-title">Фильтры</h3>
+                    <div class="filter-list">
+                        <button class="filter-btn" data-filter="blur">Размытие</button>
+                        <button class="filter-btn" data-filter="sharpen">Резкость</button>
+                        <button class="filter-btn" data-filter="brightness">Яркость</button>
+                        <button class="filter-btn" data-filter="contrast">Контраст</button>
+                        <button class="filter-btn" data-filter="hue">Оттенок</button>
+                        <button class="filter-btn" data-filter="invert">Инверсия</button>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Status Bar -->
+        <footer class="status-bar">
+            <div class="status-info">
+                <span class="canvas-info" id="canvasInfo">1920x1080 | 72 DPI</span>
+                <span class="cursor-info" id="cursorInfo">X: 0, Y: 0</span>
+            </div>
+            <div class="status-actions">
+                <button class="status-btn" data-action="grid">Сетка</button>
+                <button class="status-btn" data-action="guides">Направляющие</button>
+                <button class="status-btn" data-action="snap">Привязка</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Модальные окна -->
+    <div id="modalContainer" class="modal-container hidden">
+        <!-- Будут добавлены динамически -->
+    </div>
+
+    <!-- Скрипты -->
+    <script>
+        // Простая загрузка скриптов для GitHub Pages совместимости
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Загружаем все скрипты последовательно
+        async function loadApp() {
+            try {
+                console.log('Загрузка ArtFlow...');
+                
+                // Загружаем основные модули
+                await loadScript('js/core/EventManager.js');
+                await loadScript('js/core/BrushBase.js');
+                await loadScript('js/core/ToolManager.js');
+                await loadScript('js/core/LayerManager.js');
+                await loadScript('js/core/FilterManager.js');
+                await loadScript('js/core/CanvasManager.js');
+                await loadScript('js/core/App.js');
+                
+                // Загружаем модули кистей
+                await loadScript('js/brushes/Sphere3DBrush.js');
+                await loadScript('js/brushes/MetalBrush.js');
+                await loadScript('js/brushes/GlassBrush.js');
+                await loadScript('js/brushes/CeramicBrush.js');
+                await loadScript('js/brushes/TextureBrush.js');
+                await loadScript('js/brushes/GlowBrush.js');
+                await loadScript('js/brushes/AnimeBrushes.js');
+                await loadScript('js/brushes/DrawingBrushes.js');
+                await loadScript('js/brushes/ArtistBrushes.js');
+                
+                // Загружаем основной скрипт
+                await loadScript('js/main.js');
+                
+                console.log('ArtFlow загружен успешно!');
+                
+            } catch (error) {
+                console.error('Ошибка загрузки скриптов:', error);
+                showLoadError(error);
+            }
+        }
+
+        function showLoadError(error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'load-error';
+            errorDiv.innerHTML = `
+                <div class="error-content">
+                    <h3>Ошибка загрузки</h3>
+                    <p>Не удалось загрузить ArtFlow.</p>
+                    <p>Подробности: ${error.message}</p>
+                    <button onclick="location.reload()">Перезагрузить</button>
+                </div>
+            `;
+            
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 0, 0, 0.8);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+            `;
+            
+            errorDiv.querySelector('.error-content').style.cssText = `
+                background: rgba(0, 0, 0, 0.8);
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 500px;
+                text-align: center;
+            `;
+            
+            document.body.appendChild(errorDiv);
+        }
+
+        // Запускаем загрузку когда DOM готов
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadApp);
+        } else {
+            loadApp();
+        }
+    </script>
+</body>
+</html>
