@@ -43,7 +43,29 @@ const brushModules = [
       const key = Cl.name.replace(/Brush$/, '').toLowerCase();
       BrushLibrary.brushes[key] = Cl;
     }
-
+    // 3. Глобально регистрируем классы (GitHub Pages не делает их глобальными)
+window.OilPaintBrush = OilPaintBrush;
+window.WatercolorBrush = WatercolorBrush;
+window.PastelBrush = PastelBrush;
+window.CharcoalBrush = CharcoalBrush;
+window.InkBrush = InkBrush;
+window.DigitalArtBrush = DigitalArtBrush;
+window.MetalBrush = MetalBrush;
+window.GlowBrush = GlowBrush;
+window.Sphere3DBrush = Sphere3DBrush;
+window.GlassBrush = GlassBrush;
+window.CeramicBrush = CeramicBrush;
+window.TextureBrush = TextureBrush;
+window.AnimeHairBrush = AnimeHairBrush;
+window.AnimeEyeBrush = AnimeEyeBrush;
+window.AnimeLipBrush = AnimeLipBrush;
+window.AnimeSkinBrush = AnimeSkinBrush;
+window.AnimeEyebrowBrush = AnimeEyebrowBrush;
+window.TechnicalPenBrush = TechnicalPenBrush;
+window.CircleTemplateBrush = CircleTemplateBrush;
+window.RectangleTemplateBrush = RectangleTemplateBrush;
+window.PolygonTemplateBrush = PolygonTemplateBrush;
+window.LineTemplateBrush = LineTemplateBrush;
     // 4. Запускаем приложение (App.js должен создать window.app)
     if (window.App) {
       window.app = new App();
@@ -92,4 +114,18 @@ const brushModules = [
   } catch (err) {
     console.error('Ошибка загрузки модулей:', err);
   }
+  // 7. Подключаем кнопку «Рисовать» и включаем/выключаем рисование
+let drawingEnabled = false;
+const drawBtn = document.querySelector('[data-action="draw"]') || document.querySelector('.nav-btn[data-action="save"]'); // fallback
+if (drawBtn) {
+  drawBtn.textContent = 'Рисовать';
+  drawBtn.addEventListener('click', () => {
+    drawingEnabled = !drawingEnabled;
+    drawBtn.textContent = drawingEnabled ? 'Стоп' : 'Рисовать';
+    canvas.style.cursor = drawingEnabled ? 'crosshair' : 'default';
+  });
+}
+
+// 8. Увеличиваем размер кисти и делаем её заметной
+const BRUSH_SIZE = 30; // px
 })();
